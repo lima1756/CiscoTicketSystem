@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -8,6 +9,7 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
+    "resolveJsonModule": true,
     "baseUrl": "./",
     "incremental": true
   },
