@@ -5,6 +5,11 @@ import { SearchService } from './search.service';
 export class SearchController {
     constructor(private readonly searchService: SearchService) {}
 
+    @Get()
+    a(){
+        return "Hola"
+    }
+
     @Get(':input')
     search(@Param() params: {input:string}) {
         return this.searchService.search(params.input);

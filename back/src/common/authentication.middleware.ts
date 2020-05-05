@@ -22,7 +22,7 @@ export class AuthenticationMiddleware implements NestMiddleware {
             if (err) {
             const status = err.status || 500;
             const error = err.message || 'Sorry we were unable to process your request.';
-            return res.status(status).send({
+            return res.status(status).send({   
                 error,
             });
             }

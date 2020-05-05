@@ -1,59 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import mock_problems from '../../mocks/search_data.json';
+import { InjectModel } from '@nestjs/mongoose';
 import Fuse from 'fuse.js';
+import { Ticket } from 'src/ticket/ticket.schema';
+import { Model } from 'mongoose';
+import { TicketService } from 'src/ticket/ticket.service';
 
 @Injectable()
 export class SearchService {
-    search(input: string){
-        // TODO: change mock to real data
 
-        const data = mock_problems.map( s => this.combineAllKeyValues(s, null));
+    constructor(private readonly ticketService: TicketService){}
+
+    async search(input: string){
+        // TODO: change mock to real data
+        
+        const data = (await this.ticketService.get()).map( s => {return this.combineAllKeyValues(s, null)});
         const fuzeOptions = {
             shouldSort: true,
-            includeScore: true,
             threshold: 0.6,
-            includeMatches: true,
-
+            isCaseSensitive: false,
             keys: [
-                {
-                    name: "id", 
-                    weight: .3
-                },
-                {
-                    name: "problem_title",
-                    weight: .3
-                    
-                },
-                {
-                    name:"problem_description",
-                    weight:.3
-                },
-                {
-                    name: "file", 
-                    weight: .3
-                },
-                {
-                    name:"user", 
-                    weight:.3
-                },
-                {
-                    name:"company", 
-                    weight:.3
-                },
-                {
-                    name: "all", 
-                    weight:.3
-                }
-            ]
+                "_id",
+                "title",
+                "description",
+                "all"
+              ]
         }
-        return new Fuse(data, fuzeOptions).search(input);
+        const fuse = new Fuse(data, fuzeOptions);
+        return fuse.search(input);
     }
 
-    private combineAllKeyValues( obj: any, separator: string )
+    private combineAllKeyValues( obj: Ticket, separator: string )
     {
         separator = separator || " ";
-        obj.all = Object.keys(obj).map(s=> obj[s]).join( separator );
-        return obj;
+        let d = {...JSON.parse(JSON.stringify(obj)), ...{"all":Object.keys(JSON.parse(JSON.stringify(obj))).map(s => obj[s]).join( separator )}};
+        return d;
     }
     
 }

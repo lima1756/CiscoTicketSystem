@@ -1,0 +1,119 @@
+html, body, #root {
+  height: 100%;
+}
+
+#page_logo {
+  margin: 1em;
+  width: 4em;
+  position: fixed;
+}
+
+body {
+  background-color: #C8EDFF;
+}
+
+.card {
+  padding: 10px;
+}
+
+i {
+  margin-right: 5px;
+}
+
+td {
+  max-width: 250px;
+}
+
+.navbar {
+  padding: 15px 10px;
+  background: #fff;
+  margin-bottom: 40px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+  outline: none;
+}
+
+/* ---------------------------------------------------
+  SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+.sidebar {
+  box-shadow: 1px 0 3px rgba(0, 0, 0, .1);
+}
+
+.sidebar .nav-link{
+  color: #aaa;
+  transition: 0.3s all;
+}
+
+.sidebar .nav-link.active {
+  color: #000;
+}
+
+.sidebar .nav-link:hover{
+  color: #000;
+}
+
+/* ---------------------------------------------------
+  CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+  width: 100%;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.low-priority {
+  color: green;
+}
+
+.med-priority {
+  color: darkgoldenrod;
+}
+
+.high-priority {
+  color: red;
+}
+
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+.search-results {
+  background-color: white;
+}
+
+
+.search-row:hover {
+  cursor: pointer;
+}
