@@ -10,10 +10,12 @@ export default function HomeSearch() {
     const [searchValue, setSearchValue] = useState("");
     const [typingTimeout, setTypingTimeout] = useState(null);
     const [token, setToken] = useState("")
-    const { getIdTokenClaims } = useAuth0();
+    const { user, getIdTokenClaims } = useAuth0();
     const [searchResult, setSearchResult] = useState([]);
     const [loadingResults, setLoadingResults] = useState(true);
     const [numberResults, setNumberResults] = useState(1)
+    const [isSearching, setIsSearching] = useState(false);
+    const [specialFilter, setSpecialFilter] = useState(false);
 
 
     getIdTokenClaims().then((data) => { setToken(data.__raw) }).catch()
@@ -34,7 +36,7 @@ export default function HomeSearch() {
             }).then(res => {
                 setNumberResults(res.data.length)
                 setLoadingResults(false);
-                setSearchResult(res.data)
+                setSearchResult(res.data.map(e=>e.item))
             }).catch(err => {
                 console.log(err);
             })
@@ -42,9 +44,11 @@ export default function HomeSearch() {
     }
 
     const search = (ev) => {
+        setIsSearching(true);
         setLoadingResults(true);
         setSearchResult([]);
         setNumberResults(1);
+        setSpecialFilter(false)
         if (typingTimeout) {
             clearTimeout(typingTimeout);
         }
@@ -58,6 +62,32 @@ export default function HomeSearch() {
         }
     }
 
+    const userTickets = () => {
+        if(specialFilter){
+            setSpecialFilter(false);
+            setLoadingResults(false);
+            return;
+        }
+        setSearchResult([]);
+        setIsSearching(false);
+        setLoadingResults(true);
+        setNumberResults(1);
+        setSpecialFilter(true);
+        setSearchValue("");
+        axios.get("/ticket/user/"+user.sub, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(res => {
+            setNumberResults(res.data.length)
+            setLoadingResults(false);
+            setSearchResult(res.data);
+        }).catch(err => {
+            setNumberResults(0);
+            console.log(err);
+        })
+    }
+
     return (
         <div className="vertical-center">
             <Container className="align-items-center ">
@@ -69,32 +99,32 @@ export default function HomeSearch() {
                         </Form>
                     </Col>
                 </Row>
-                {/* {(searchValue === "") &&
+                {(searchValue === "") &&
                     <Row>
                         <Col align="center" className="center-block" >
-                            <Card style={{ width: '18rem', boxShadow: "2px 2px 4px #DADDD8" }} >
+                            <Card style={{ width: '18rem', boxShadow: "2px 2px 4px #DADDD8" }} className="clickable" onClick={userTickets}>
                                 <Card.Img variant="top" src="https://www.alphatechitsolutions.co.uk/wp-content/uploads/2018/11/illustrations-02.png" />
                                 <Card.Body>
                                     <Card.Title>My tickets</Card.Title>
                                 </Card.Body>
                             </Card>
                         </Col>
-                        <Col align="center" className="center-block" >
+                        {!specialFilter && <Col align="center" className="center-block" >
                             <Card style={{ width: '18rem', boxShadow: "2px 2px 4px #DADDD8" }} >
                                 <Card.Img variant="top" src="https://www.webnode.es/blog/files/2019/05/blog2.png" />
                                 <Card.Body>
                                     <Card.Title>Knowledge</Card.Title>
                                 </Card.Body>
                             </Card>
-                        </Col>
+                        </Col>}
                     </Row>
-                } */}
-                {(searchValue !== "") &&
+                }
+                {(searchValue !== "" || specialFilter) &&
                     <Row>
                         <Col align="center" className="center-block" >
                             <Table striped bordered hover className="search-results">
                                 <tbody>
-                                    <tr>
+                                    {isSearching && <tr>
                                         <td colSpan={3}>
                                             {searchValue}
                                         </td>
@@ -103,7 +133,7 @@ export default function HomeSearch() {
                                                 Create
                                                 </Tabler.Button>
                                         </td>
-                                    </tr>
+                                    </tr>}
                                     <tr>
                                         <th>Title</th>
                                         <th>Company</th>
@@ -120,11 +150,11 @@ export default function HomeSearch() {
                                     }
                                     {searchResult.map((r) => {
                                         return (
-                                            <tr k={r.item._id} className="search-row" onClick={()=>{history.push("/ticket/"+r.item._id)}}>
-                                                <td>{r.item.title}</td>
-                                                <td>{r.item.company}</td>
-                                                <td>{r.item.status}</td>
-                                                <td>{r.item.type}</td>
+                                            <tr key={r._id} className="clickable" onClick={()=>{history.push("/ticket/"+r._id)}}>
+                                                <td>{r.title}</td>
+                                                <td>{r.company}</td>
+                                                <td>{r.status}</td>
+                                                <td>{r.type}</td>
                                             </tr>
                                         )
                                     })}
