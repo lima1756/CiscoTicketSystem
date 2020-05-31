@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import express from 'express';
 import { AuthenticationMiddleware } from './common/authentication.middleware';
+require('dotenv').config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.use(new AuthenticationMiddleware().use)
-  await app.listen(5001);
+  await app.listen(process.env.PORT || 5001);
 }
 bootstrap();
