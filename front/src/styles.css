@@ -114,6 +114,6 @@ td {
 }
 
 
-.search-row:hover {
+.clickable:hover {
   cursor: pointer;
 }
