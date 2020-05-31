@@ -1,14 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import Navbar from "./components/navbar.component";
-// import Sidebar from "./components/sidebar.component";
-// import Dashboard from "./components/dashboard.component";
-// import CreateTicket from "./components/create-ticket.component";
-// import CreateUser from "./components/create-user.component";
-// import ManageUsers from "./components/manage-users.component";
-// import ManageProjects from "./components/manage-projects.component";
-// import EditTicket from "./components/edit-ticket.component";
 import { useAuth0 } from './react-auth0-spa';
 import { Card, Button, Col } from 'react-bootstrap';
 import HomeSearch from './pages/HomeSearch';
@@ -16,6 +8,13 @@ import history from './utils/history'
 import TicketManipulation from './components/Partner/TicketManipulation';
 import axios from 'axios';
 import TicketView from './components/Partner/TicketView';
+import Dashboard from './components/Cisco/views/Dashboard';
+import CiscoTicketManipulation from './components/Cisco/views/TicketManipulation';
+import CiscoTicketView from './components/Cisco/views/TicketManipulation';
+import "./assets/css/animate.min.css";
+import "./assets/sass/light-bootstrap-dashboard-react.scss?v=1.3.0";
+import "./assets/css/demo.css";
+import "./assets/css/pe-icon-7-stroke.css";
 
 export default function App() {
   const { isAuthenticated, loginWithRedirect, logout, getIdTokenClaims, user } = useAuth0();
@@ -40,18 +39,30 @@ export default function App() {
         })
     }).catch()
 
+    let cisco = true;
     
-
-    body = (
-      <Router history={history}>
-        <Route path="/" exact component={HomeSearch} />
-        <Route path="/ticket/new" exact component={TicketManipulation} />
-        <Route path="/ticket/new/:problem" exact component={TicketManipulation} />
-        <Route path="/ticket/edit/:id" exact component={TicketManipulation} />
-        <Route path="/ticket/:id" exact component={TicketView} />
-        <Route path="/tickets" exact component={null} />
-      </Router>
-    )
+    if(cisco){
+      body = (
+        <Router history={history}>
+          <Route path="/" exact component={Dashboard} />
+          <Route path="/ticket/edit/:id" exact component={CiscoTicketManipulation} />
+          <Route path="/ticket/:id" exact component={CiscoTicketView} />
+        </Router>
+      )
+    }
+    else {
+      body = (
+        <Router history={history}>
+          <Route path="/" exact component={HomeSearch} />
+          <Route path="/ticket/new" exact component={TicketManipulation} />
+          <Route path="/ticket/new/:problem" exact component={TicketManipulation} />
+          <Route path="/ticket/edit/:id" exact component={TicketManipulation} />
+          <Route path="/ticket/:id" exact component={TicketView} />
+          <Route path="/tickets" exact component={null} />
+        </Router>
+      )
+    }
+    
   }
   else {
     body = (

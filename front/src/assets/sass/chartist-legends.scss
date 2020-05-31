@@ -1,0 +1,87 @@
+$ct-series-colors: (
+    #6c757d,
+    #007bff,
+    #17a2b8,
+    #28a745,
+    #dc3545,
+    #d70206,
+    #f05b4f,
+    #f4c63d,
+    #d17905,
+    #453d3f,
+    #59922b,
+    #0544d3,
+    #6b0392,
+    #f05b4f,
+    #dda458,
+    #eacf7d,
+    #86797d,
+    #b2c326,
+    #6188e2,
+    #a748ca
+) !default;
+
+$letters: (
+    a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u
+);
+
+.ct-legend {
+    position: relative;
+    z-index: 10;
+    list-style: none;
+    text-align: center;
+ 
+    li {
+        position: relative;
+        padding-left: 23px;
+        margin-right: 10px;
+        margin-bottom: 3px;
+        cursor: pointer;
+        display: inline-block;
+    }
+ 
+    li:before {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        content: ' ';
+        border: 3px solid transparent;
+        border-radius: 2px;
+    }
+ 
+    li.inactive:before {
+        background: transparent;
+    }
+ 
+    &.ct-legend-inside {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+ 
+    @for $i from 0 to length($ct-series-colors) {
+        .ct-series-#{$i}:before {
+            background-color: nth($ct-series-colors, $i + 1);
+            border-color: nth($ct-series-colors, $i + 1);
+        }
+    }
+}
+
+@for $i from 0 to length($ct-series-colors) {
+    .ct-series-#{nth($letters, $i + 1)} .ct-line {
+        stroke: nth($ct-series-colors, $i + 1) !important;
+    }
+
+    .ct-series-#{nth($letters, $i + 1)} .ct-point {
+        stroke: nth($ct-series-colors, $i + 1) !important;
+        stroke-width: 20px !important;
+    }
+}
+
+@for $i from 0 to length($ct-series-colors) {
+    .ct-series-#{nth($letters, $i + 1)} .ct-slice-pie {
+        fill: nth($ct-series-colors, $i + 1) !important;
+    }
+}

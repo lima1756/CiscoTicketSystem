@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Form, Container, Button } from 'react-bootstrap';
 import { useParams } from "react-router-dom";
 import axios from 'axios';
-import { useAuth0 } from '../../react-auth0-spa';
+import { useAuth0 } from '../../../react-auth0-spa';
 import { useHistory } from "react-router-dom";
 
 
@@ -91,6 +91,19 @@ export default function TicketManipulation() {
                                     <Form.Label>Title</Form.Label>
                                     <Form.Control type="text" placeholder="Title of your problem" value={ticket.title} onChange={modifyField("title")} />
                                     <Form.Text className="text-muted"> An small description of your problem so we can classify it.
+                                    </Form.Text>
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Status</Form.Label>
+                                    <Form.Control as="select" custom value={ticket.type} onChange={modifyField("status")}>
+                                        <option>Not assigned</option>
+                                        <option>Assigned</option>
+                                        <option>In progress</option>
+                                        <option>Completed</option>
+                                        <option>Urgent</option>
+                                    </Form.Control>
+                                    <Form.Text className="text-muted">
+                                        Select the current status
                                     </Form.Text>
                                 </Form.Group>
 
