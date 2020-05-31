@@ -1,7 +1,5 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { SearchModule } from './search/search.module';
 import { TicketModule } from './ticket/ticket.module';
 import { CompanyModule } from './company/company.module';
@@ -16,8 +14,6 @@ require('dotenv').config();
     SearchModule, TicketModule, CompanyModule, UserModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'public')
-    })],
-  controllers: [AppController],
-  providers: [AppService],
+    })]
 })
 export class AppModule {}

@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TicketController } from './ticket.controller';
 import { TicketService } from './ticket.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TicketSchema } from './ticket.schema';
+import { AuthenticationMiddleware } from 'src/common/authentication.middleware';
 
 
 @Module({
@@ -13,4 +14,9 @@ import { TicketSchema } from './ticket.schema';
   providers: [TicketService],
   exports: [MongooseModule.forFeature([{ name: 'Ticket', schema: TicketSchema }]), TicketService]
 })
-export class TicketModule {}
+export class TicketModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): MiddlewareConsumer | void {
+    consumer.apply(AuthenticationMiddleware)
+    .forRoutes(TicketController)
+  }
+}

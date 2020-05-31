@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CompanySchema } from './company.schema';
+import { AuthenticationMiddleware } from 'src/common/authentication.middleware';
 
 
 @Module({
@@ -13,4 +14,10 @@ import { CompanySchema } from './company.schema';
   providers: [CompanyService],
 
 })
-export class CompanyModule {}
+
+export class CompanyModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): MiddlewareConsumer | void {
+    consumer.apply(AuthenticationMiddleware)
+    .forRoutes(CompanyController)
+  }
+}
