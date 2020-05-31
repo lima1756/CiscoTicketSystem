@@ -39,7 +39,7 @@ export default function App() {
         })
     }).catch()
 
-    let cisco = true;
+    let cisco = user.sub == "auth0|5eaf41681cc1ac0c14815ebb";
     
     if(cisco){
       body = (
