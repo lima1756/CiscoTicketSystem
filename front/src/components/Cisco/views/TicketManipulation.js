@@ -95,7 +95,7 @@ export default function TicketManipulation() {
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Status</Form.Label>
-                                    <Form.Control as="select" custom value={ticket.type} onChange={modifyField("status")}>
+                                    <Form.Control as="select" custom value={ticket.status} onChange={modifyField("status")}>
                                         <option>Not assigned</option>
                                         <option>Assigned</option>
                                         <option>In progress</option>

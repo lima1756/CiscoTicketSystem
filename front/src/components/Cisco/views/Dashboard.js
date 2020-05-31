@@ -297,8 +297,8 @@ var dataLine = {
                       <Form.Check inline label="Not assigned" type="checkbox" defaultChecked onClick={()=>{filtering("Not assigned")}}/>
                       <Form.Check inline label="Assigned" type="checkbox"  defaultChecked onClick={()=>{filtering("Assigned")}}/>
                       <Form.Check inline label="In progress" type="checkbox" defaultChecked onClick={()=>{filtering("In progress")}}/>
-                      <Form.Check inline label="Completed" type="checkbox" defaultChecked onClick={()=>{filtering("Completed")}}/>
-                      <Form.Check inline label="Urgent" type="checkbox" onClick={()=>{filtering("Urgent")}}/>
+                      <Form.Check inline label="Urgent" type="checkbox" defaultChecked onClick={()=>{filtering("Urgent")}}/>
+                      <Form.Check inline label="Completed" type="checkbox"  onClick={()=>{filtering("Completed")}}/>
                   </Form>
                   <Tickets tickets={tickets} pageSize={6} page={1} exclude={filter} search={searchValue}/>
                   <Pagination>

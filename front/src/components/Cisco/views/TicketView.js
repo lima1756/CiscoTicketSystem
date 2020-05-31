@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Form, Container, Button } from 'react-bootstrap';
 import { useParams } from "react-router-dom";
 import axios from 'axios';
-import { useAuth0 } from '../../react-auth0-spa';
+import { useAuth0 } from '../../../react-auth0-spa';
 import { ProgressCard, StampCard, ContactCard, Icon } from 'tabler-react';
 import * as Tabler from 'tabler-react';
-import { progress } from '../../utils/constants';
+import { progress } from '../../../utils/constants';
 import { useHistory } from "react-router-dom";
 
 
@@ -49,6 +49,20 @@ export default function TicketView() {
             })
         }).catch()
     }, []);
+
+    const completed = (ticket) => {
+        ticket.status="Completed";
+        axios.put("/ticket/"+id, ticket, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        ).then(res => {
+            history.push("/ticket/" + res.data._id)
+        }).catch(err => {
+            console.log(err);
+        })
+    }
 
     const comments = ticket.comments.map((comment, key) => {
         return (<p key={key}><b>adasd</b>{' '}<small>(asfdasdf)</small>: fadsfafadsfasd gasgarw gare gvsaer gv saergvasgar gvbazdfv czvczxv</p>)
@@ -108,7 +122,7 @@ export default function TicketView() {
                                 </Row>
                                 <Row>
                                     <Button variant="outline-primary" onClick={()=>{history.push("/ticket/edit/" + ticket._id)}}>Modify</Button> {" "}
-                                    <Button variant="outline-success">Completed Ticket</Button>
+                                    <Button variant="outline-success" onClick={()=>{completed(ticket)}}>Completed Ticket</Button>
                                 </Row>
                             </Card.Body>
                         </Card >

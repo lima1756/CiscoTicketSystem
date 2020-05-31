@@ -1,7 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import Button from "./CustomButton.jsx";
 import Fuse from 'fuse.js';
+import { useHistory } from "react-router-dom";
+import { useAuth0 } from '../../../react-auth0-spa';
+import axios from 'axios';
 
 
 /**
@@ -9,10 +12,28 @@ import Fuse from 'fuse.js';
  */
 
 export default function Tickets(props) {
-    
+    const [token, setToken] = useState("")
     const edit = <Tooltip id="edit_tooltip">Update Ticket</Tooltip>;
     const remove = <Tooltip id="remove_tooltip">Completed Ticket</Tooltip>;
     const exclude = props.exclude;
+    const history = useHistory();
+    const { user, getIdTokenClaims } = useAuth0();
+    getIdTokenClaims().then((data) => { setToken(data.__raw) }).catch()
+
+    const completed = (ticket) => {
+      ticket.status="Completed";
+      axios.put("/ticket/"+ticket._id, ticket, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      }
+      ).then(res => {
+          history.push("/ticket/" + res.data._id)
+      }).catch(err => {
+          console.log(err);
+      })
+    }
+
     let tickets;
     if(props.search !== ""){
       tickets = search(props.search, props.tickets).filter((ticket)=> !exclude.includes(ticket.status));  
@@ -22,19 +43,19 @@ export default function Tickets(props) {
       tickets = props.tickets.filter((ticket)=> !exclude.includes(ticket.status));
     }
     const table = [];
-    for (var i = props.pageSize * (props.page-1); i < props.pageSize * props.page && i<tickets.length; i++) {
+    for (let i = props.pageSize * (props.page-1); i < props.pageSize * props.page && i<tickets.length; i++) {
       table.push(
         <tr key={i}>
-          <td>{tickets[i].title}</td>
+          <td className="clickable" onClick={()=>{history.push("/ticket/"+tickets[i]._id)}}>{tickets[i].title}</td>
           <td className="td-actions text-right">
-            <OverlayTrigger placement="top" overlay={edit}>
-              <Button bsstyle="info" simple type="button" bssize="xs">
+            <OverlayTrigger placement="top" overlay={edit} >
+              <Button bsstyle="info" simple type="button" bssize="xs" onClick={()=>{history.push("/ticket/edit/" + tickets[i]._id)}}>
                 <i className="fa fa-edit" />
               </Button>
             </OverlayTrigger>
 
             <OverlayTrigger placement="top" overlay={remove}>
-              <Button bsstyle="danger" simple type="button" bssize="xs">
+              <Button bsstyle="success" simple type="button" bssize="xs" onClick={()=>{completed(tickets[i])}}>
                 <i className="fa fa-check" />
               </Button>
             </OverlayTrigger>

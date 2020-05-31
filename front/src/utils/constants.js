@@ -1,4 +1,3 @@
-
 export const progress = {
     "not assigned": {
         name: "Not Assigned",
@@ -6,7 +5,7 @@ export const progress = {
         color: "primary"
     },
     "started": {
-        name: "Started",
+        name: "Assigned",
         value: 33,
         color: "danger"
     },
@@ -19,6 +18,11 @@ export const progress = {
         name: "Completed",
         value: 100,
         color: "sucess"
+    },
+    "urgent": {
+        name: "Urgent",
+        value: 100,
+        color: "danger"
     }
 
 }
