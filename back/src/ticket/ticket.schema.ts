@@ -10,7 +10,8 @@ export const TicketSchema = new mongoose.Schema({
     user: { type: String, required: true},
     company: { type: String, required: true},
     public: { type: Boolean, required: true},
-    comments: { type: mongoose.Schema.Types.Array, required: false, default: []}
+    comments: { type: mongoose.Schema.Types.Array, required: false, default: []},
+    date: {type: Date, required: false, default: Date.now()}
 });
 
 export interface Ticket extends mongoose.Document {
@@ -23,6 +24,7 @@ export interface Ticket extends mongoose.Document {
     readonly company: String;
     readonly public: Boolean;
     readonly comments: Array<Comment>;
+    readonly date: Date;
 }
 
 
@@ -36,5 +38,6 @@ export class TicketDTO  {
     readonly company: String;
     readonly public: Boolean;
     readonly comments: Array<Comment>;
+    readonly date: Date;
 }
   

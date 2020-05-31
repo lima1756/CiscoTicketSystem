@@ -10,9 +10,7 @@ export class SearchService {
 
     constructor(private readonly ticketService: TicketService){}
 
-    async search(input: string){
-        // TODO: change mock to real data
-        
+    async search(input: string){      
         const data = (await this.ticketService.get()).map( s => {return this.combineAllKeyValues(s, null)});
         const fuzeOptions = {
             shouldSort: true,
